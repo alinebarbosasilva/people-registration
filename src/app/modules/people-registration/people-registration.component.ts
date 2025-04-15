@@ -166,8 +166,6 @@ export class PeopleRegistrationComponent implements AfterViewInit {
     );
   }
 
-
-
   reload(pageIndex: number = 0, pageSize: number = 10, name?: string, sortBy?: string): void {
     this.peopleService.getPeople(pageIndex + 1, pageSize)
       .pipe(
