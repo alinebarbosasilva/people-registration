@@ -27,7 +27,7 @@ Conta com uma interface moderna, responsiva e acessível, construída com **Angu
 
 A tela de listagem permite:
 
-- 🔎 **Filtrar por nome e email**
+- 🔎 **Filtrar por nome e ordenar**
 - 📄 **Paginar os resultados** por página, com controle de quantidade de itens
 - ♻️ Atualização automática da lista a partir de observables
 
