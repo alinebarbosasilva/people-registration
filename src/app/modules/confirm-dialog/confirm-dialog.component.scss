@@ -1,0 +1,38 @@
+.title-dialog {
+  font-family: "JetBrains Mono", "Courier New", Courier, monospace;
+  font-size: 1.6rem;
+  color: #292929;
+  line-height: 1;
+  padding: 1rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.dialog-content {
+  color: #707070;
+  padding: 0 1rem;
+  font-size: .8rem;
+}
+
+:host {
+  padding: 1rem;
+  display: block;
+
+  ::ng-deep .btn-confirm {
+    background-color: #131E23 !important;
+    color: #ffffff !important;
+  }
+
+  ::ng-deep .btn-cancel {
+    background-color: #ffffff !important;
+    color: #707070 !important;
+    border: none !important;
+
+    .mat-mdc-button:not(:disabled) {
+      color: #707070 !important;
+    }
+  }
+}
+
+
+

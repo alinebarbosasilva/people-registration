@@ -1,0 +1,46 @@
+<h2  class="title-dialog">
+  {{ data.title ?? 'Confirmação' }}
+</h2>
+
+@if (data.message) {
+  <div  class="dialog-content">
+    {{data.message }}
+  </div>
+}
+
+<mat-dialog-actions [align]="data.actionAlign ?? 'end'">
+  @if (data.showCloseButton !== false) {
+    <button
+      [color]="data.cancelButtonColor ?? 'btn-cancel'"
+      [ngClass]="data.cancelButtonClass ?? 'btn-cancel'"
+      [ngStyle]="{
+        'background-color': data.cancelButtonColor ?? '#ffffff',
+        'color': data.cancelButtonColor ?? '#707070'
+      }"
+      mat-button
+      (click)="onCancel()">
+      {{ data.cancelButtonText ?? 'Cancelar' }}
+      @if (data.cancelButtonIcon) {
+        <mat-icon>{{ data.cancelButtonIcon }}</mat-icon>
+      }
+    </button>
+  }
+
+  @if (data.showConfirmButton !== false) {
+    <button
+      mat-raised-button
+      [color]="data.confirmButtonColor ?? 'btn-confirm'"
+      [ngClass]="data.confirmButtonClass ?? 'btn-confirm'"
+      [ngStyle]="{
+        'background-color': data.confirmButtonColor ?? '#131E23',
+        'color': data.confirmButtonColor ?? '#ffffff'
+      }"
+      (click)="onConfirm()"
+    >
+      {{ data.confirmButtonText ?? 'Confirmar' }}
+      @if (data.confirmButtonIcon) {
+        <mat-icon>{{ data.confirmButtonIcon }}</mat-icon>
+      }
+    </button>
+  }
+</mat-dialog-actions>

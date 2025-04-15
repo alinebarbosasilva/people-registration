@@ -1,1 +1,144 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
+
+
+$color-primary: #131E23;
+$color-secondary: #ffffff;
+$color-error: red;
+$color-muted: #6c757d;
+$color-input-bg: #ebebeb;
+
+$font-size-title: 2rem;
+$font-size-button: 16px;
+$font-size-error: 0.9rem;
+$font-size-hint: 0.85rem;
+$font-size-dialog-title: 1.25rem;
+
+$radius-button: 24px;
+$radius-dialog: 4px;
+
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+
+$button-height: 45px;
+$input-height: 40px;
+$dialog-title-height: 110px;
+
+
+:root {
+  --app-font-family: 'JetBrains Mono', 'Courier New', Courier, monospace;
+}
+
+:root {
+  @include mat.button-overrides((
+    container-color: #131E23,
+    label-text-color: #ffffff,
+    ripple-color: rgba(19, 30, 35, 0.49)
+  ));
+
+  @include mat.form-field-overrides((
+    container-vertical-padding: 0,
+    container-height: 10px,
+    container-text-line-height: 2.5,
+  ));
+
+  //@include mat.select-overrides((
+  //  placeholder-text-color: $color-secondary,
+  //));
+  //
+  //@include mat.form-field-overrides((
+  //  container-vertical-padding: 0,
+  //  container-height: 10px,
+  //  container-text-line-height: 2.5,
+  //  input-text-color: $color-secondary,
+  //  label-text-color: $color-secondary,
+  //  hover-outline-color: $color-secondary,
+  //  hover-label-text-color: $color-secondary,
+  //  outline-color: $color-secondary,
+  //  input-text-placeholder-color: $color-secondary,
+  //  focus-outline-color: $color-secondary,
+  //  focus-label-text-color: $color-secondary,
+  //));
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  font-family: var(--app-font-family) !important;
+}
+
+h1, p, table, th, td, a, span, label,
+.mat-mdc-button,
+.mat-mdc-form-field,
+.mat-mdc-table,
+.mat-mdc-dialog-container,
+.mat-mdc-paginator,
+.mat-mdc-snack-bar-container {
+  font-family: var(--app-font-family) !important;
+}
+
+.config-dialog {
+  border-radius: 11px;
+  padding: 1rem 1.5rem;
+  background-color: #fff;
+  max-width: 500px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.success-dialog {
+  background-color: #ffffff;
+  color: #ffffff;
+  border-radius: 11px;
+}
+
+.confirm-dialog {
+  border-radius: 11px;
+  color: #707070;
+  background-color: white;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.mat-mdc-button {
+  background-color: white !important;
+  color: black !important;
+}
+
+:host {
+  display: block;
+  padding: 1rem;
+}
+
+mat-dialog-content {
+  margin-bottom: 1rem;
+  font-size: 14px;
+}
+
+.mat-dialog-container {
+  border-radius: $radius-dialog !important;
+}
+
+.mdc-line-ripple {
+  display: none !important;
+}
+
+input.mat-mdc-input-element {
+  height: $input-height !important;
+  font-size: $font-size-button !important;
+  padding: 0 !important;
+  background-color: transparent !important;
+}
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: $color-input-bg !important;
+}
+
+.mat-mdc-dialog-container .mat-mdc-dialog-title {
+  margin: 0 !important;
+  padding: $spacing-sm $spacing-md !important;
+  font-size: $font-size-dialog-title;
+  font-weight: 600;
+  background-color: $color-secondary;
+}
+

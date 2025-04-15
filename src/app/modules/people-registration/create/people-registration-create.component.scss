@@ -1,0 +1,77 @@
+$color-primary: #131E23;
+$color-secondary: #ffffff;
+$color-error: red;
+$color-muted: #6c757d;
+
+$font-size-title: 2rem;
+$font-size-error: 0.9rem;
+$font-size-hint: 0.85rem;
+
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+
+.container {
+  padding: $spacing-sm;
+  background-color: $color-secondary;
+}
+
+.content {
+  gap: .5rem;
+  display: flex;
+  flex-direction: column;
+  background-color: $color-secondary;
+}
+
+.title {
+  font-size: $font-size-title;
+  font-weight: 500;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width {
+  flex: 1 1 100%;
+}
+
+.action {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  padding-top: $spacing-md;
+  background-color: $color-secondary;
+}
+
+.mat-error {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  color: $color-error;
+  font-size: $font-size-error;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-datepicker-toggle {
+  color: $color-primary;
+}
+
+.mat-hint {
+  font-size: $font-size-hint;
+  color: $color-muted;
+}
+
+.new-registration-button {
+  display: flex;
+  gap: 0.5rem;
+}
+
+@media (min-width: 600px) {
+  .full-width {
+    flex: 1 1 45%;
+  }
+}

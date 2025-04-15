@@ -1,0 +1,78 @@
+<div class="container">
+  <h1 class="title">Editar cadastro</h1>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="content">
+
+      <div class="row">
+        <mat-label>Nome</mat-label>
+        <mat-form-field appearance="fill" class="full-width">
+          <input matInput placeholder="Insira o nome" formControlName="name"/>
+          @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
+            <mat-error>Nome é obrigatório.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="row">
+        <mat-label>E-mail</mat-label>
+        <mat-form-field appearance="fill" class="full-width">
+          <input matInput placeholder="Insira o e-mail" formControlName="email"/>
+          @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
+            <mat-error>E-mail é obrigatório.</mat-error>
+          }
+          @if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
+            <mat-error>E-mail inválido.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="row">
+        <mat-label>Telefone</mat-label>
+        <mat-form-field appearance="fill" class="full-width">
+          <input matInput mask="(00) 00000-0000" placeholder="Insira o telefone" formControlName="phone"/>
+          @if (form.get('phone')?.hasError('required') && form.get('phone')?.touched) {
+            <mat-error>Telefone é obrigatório.</mat-error>
+          }
+          @if (form.get('phone')?.hasError('mask') && form.get('phone')?.touched) {
+            <mat-error>Telefone inválido.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="row">
+        <mat-label>Data de Nascimento</mat-label>
+        <mat-form-field appearance="fill" class="full-width">
+          <input matInput
+                 [matDatepicker]="picker"
+                 appFormDate
+                 placeholder="Insira data de nascimento"
+                 formControlName="birthDate"
+                 name="birthDate"/>
+
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker xPosition="end" yPosition="below"></mat-datepicker>
+
+          @if (form.get('birthDate')?.hasError('required') && form.get('birthDate')?.touched) {
+            <mat-error>Data de nascimento é obrigatória.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="action">
+      <button
+        [disabled]="form.invalid || !form.dirty"
+        mat-raised-button
+        color="primary"
+        type="submit"
+        class="full-width-button">
+
+        <span class="save-button">Salvar Alterações
+          <mat-icon>arrow_right_alt</mat-icon></span>
+      </button>
+      <button mat-button type="button" (click)="onCancel()" class="full-width-button--cancel">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>

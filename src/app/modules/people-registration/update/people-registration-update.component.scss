@@ -1,0 +1,124 @@
+$color-primary: #131E23;
+$color-secondary: #ffffff;
+$color-error: red;
+$color-muted: #6c757d;
+$color-input-bg: #ebebeb;
+$secondary-color: #ffffff;
+
+$font-size-title: 2rem;
+$font-size-button: 16px;
+$font-size-error: 0.9rem;
+$font-size-hint: 0.85rem;
+$font-size-dialog-title: 1.25rem;
+
+$radius-button: 24px;
+$radius-dialog: 4px;
+
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+
+$button-height: 45px;
+$input-height: 40px;
+$dialog-title-height: 110px;
+
+
+.container {
+  padding: $spacing-sm;
+  background-color: $color-secondary;
+}
+
+.content {
+  gap: .5rem;
+  display: flex;
+  flex-direction: column;
+  background-color: $color-secondary;
+}
+
+.title {
+  font-size: $font-size-title;
+  font-weight: 500;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width {
+  flex: 1 1 100%;
+}
+
+@media (min-width: 600px) {
+  .full-width {
+    flex: 1 1 45%;
+  }
+}
+
+.action {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  padding-top: $spacing-md;
+  background-color: $color-secondary;
+}
+
+.mat-error {
+  display: flex;
+  flex-direction: column;
+  font-size: $font-size-error;
+  width: 100%;
+  color: $color-error;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-datepicker-toggle {
+  color: $color-primary;
+}
+
+.mat-hint {
+  font-size: $font-size-hint;
+  color: $color-muted;
+}
+
+.save-button {
+  display: flex;
+  gap: 0.5rem;
+}
+
+:host {
+  ::ng-deep .mat-dialog-container {
+    border-radius: $radius-dialog !important;
+  }
+
+  ::ng-deep .mdc-line-ripple {
+    display: none !important;
+  }
+
+  ::ng-deep input.mat-mdc-input-element {
+    height: $input-height !important;
+    font-size: $font-size-button !important;
+    padding: 0 !important;
+    background-color: transparent !important;
+  }
+
+  ::ng-deep .mat-mdc-form-field-infix {
+    padding: 0 !important;
+    min-height: auto !important;
+  }
+
+  ::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: $color-input-bg !important;
+  }
+
+  ::ng-deep .mat-mdc-dialog-container .mat-mdc-dialog-title {
+    margin: 0 !important;
+    padding: $spacing-sm $spacing-md !important;
+    font-size: $font-size-dialog-title;
+    font-weight: 600;
+    height: $dialog-title-height;
+    background-color: $color-secondary;
+  }
+}
