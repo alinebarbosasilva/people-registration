@@ -4,7 +4,7 @@ import { PeopleRegistrationService } from './people-registration.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { of } from 'rxjs';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
@@ -40,9 +40,9 @@ describe('PeopleRegistrationComponent', () => {
         MatFormFieldModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        MatOptionModule
+        MatOptionModule,
+        PeopleRegistrationComponent,
       ],
-      declarations: [PeopleRegistrationComponent],
       providers: [PeopleRegistrationService]
     }).compileComponents();
   });
@@ -58,9 +58,9 @@ describe('PeopleRegistrationComponent', () => {
         name: 'Jin Woo',
         email: 'jinwoo@solo-leveling.com',
         phone: '123456789',
-        birthDate: '2000-04-04T00:00:00.000Z',
-        createdAt: '2023-01-01T00:00:00.000Z',
-        updatedAt: '2023-01-02T00:00:00.000Z'
+        birthDate: '1996-25-10T00:00:00.000Z',
+        createdAt: '2025-01-01T00:00:00.000Z',
+        updatedAt: '2025-01-02T00:00:00.000Z'
       }],
       page: 1,
       limit: 10,
@@ -98,10 +98,10 @@ describe('PeopleRegistrationComponent', () => {
       id: 1,
       name: 'Jin Woo',
       email: 'jinwoo@solo-leveling.com',
-      phone: '123456789',
-      birthDate: '2000-04-04T00:00:00.000Z',
-      createdAt: '2023-01-01T00:00:00.000Z',
-      updatedAt: '2023-01-02T00:00:00.000Z'
+      phone: '47988414130',
+      birthDate: '1996-04-04T00:00:00.000Z',
+      createdAt: '2025-01-01T00:00:00.000Z',
+      updatedAt: '2025-01-02T00:00:00.000Z'
     };
 
     const dialogRef = { afterClosed: () => of(true) };
@@ -119,17 +119,16 @@ describe('PeopleRegistrationComponent', () => {
       id: 1,
       name: 'Jin Woo',
       email: 'jinwoo@solo-leveling.com',
-      phone: '123456789',
-      birthDate: '2000-04-04T00:00:00.000Z',
-      createdAt: '2023-01-01T00:00:00.000Z',
-      updatedAt: '2023-01-02T00:00:00.000Z'
+      phone: '47988414130',
+      birthDate: '1996-04-04T00:00:00.000Z',
+      createdAt: '2025-01-01T00:00:00.000Z',
+      updatedAt: '2025-01-02T00:00:00.000Z'
     };
 
     const dialogRef = { afterClosed: () => of(true) };
     spyOn(component['dialog'], 'open').and.returnValue(dialogRef as any);
     spyOn(component, 'reload');
     spyOn(peopleService, 'deletePerson').and.returnValue(of(undefined));
-
 
     component.deletePerson(person);
     dialogRef.afterClosed().subscribe(() => {

@@ -28,7 +28,7 @@ import {MatInputModule} from '@angular/material/input';
     NgOptimizedImage,
     MatDatepickerModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']

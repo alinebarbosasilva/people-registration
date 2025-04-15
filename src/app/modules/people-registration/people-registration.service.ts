@@ -1,9 +1,9 @@
-import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import {catchError, delay, Observable, of} from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { Person } from '../../models/person';
-import { PaginatedResponse } from '../../models/paginated-response';
+import {inject, Injectable} from '@angular/core';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {catchError, Observable, of} from 'rxjs';
+import {environment} from '../../../environments/environment';
+import {Person} from '../../models/person';
+import {PaginatedResponse} from '../../models/paginated-response';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +23,7 @@ export class PeopleRegistrationService {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('limit', limit.toString())
-
+    //Comentado pois a API retornava erro 500 ao enviar os parameters
     // .set('sortBy', sortBy)
     // if (name) {
     //   params = params.set('name', name);
@@ -42,17 +42,14 @@ export class PeopleRegistrationService {
   }
 
   createPerson(person: Person): Observable<Person> {
-    return of({}) as any;
     return this.http.post<Person>(this.api, person);
   }
 
   updatePerson(id: number, person: Person): Observable<Person> {
-    return of({}) as any;
     return this.http.patch<Person>(`${this.api}/${id}`, person);
   }
 
   deletePerson(id: number): Observable<void> {
-    return of({}) as any;
     return this.http.delete<void>(`${this.api}/${id}`);
   }
 }

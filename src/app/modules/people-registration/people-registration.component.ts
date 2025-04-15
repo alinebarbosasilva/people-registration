@@ -1,28 +1,61 @@
-import {AfterViewInit, Component, computed, DestroyRef, effect, inject, signal, ViewChild} from '@angular/core';
-import {CommonModule, DatePipe} from '@angular/common';
-import {FormBuilder, FormGroup, ReactiveFormsModule as RFM} from '@angular/forms';
-import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import {MatSelectModule} from '@angular/material/select';
-import {MatNativeDateModule, MatOptionModule} from '@angular/material/core';
-import {MatTableModule} from '@angular/material/table';
-import {debounceTime, tap} from 'rxjs';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {
+  AfterViewInit,
+  Component,
+  DestroyRef,
+  ViewChild,
+  computed,
+  effect,
+  inject,
+  signal
+} from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule as RFM
+} from '@angular/forms';
+import {
+  MatPaginator,
+  MatPaginatorModule,
+  PageEvent
+} from '@angular/material/paginator';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import {
+  MatNativeDateModule,
+  MatOptionModule
+} from '@angular/material/core';
+import { MatTableModule } from '@angular/material/table';
+import { debounceTime, tap } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import {PeopleRegistrationService} from './people-registration.service';
-import {Person} from '../../models/person';
-import {PaginatedResponse} from '../../models/paginated-response';
+import { PeopleRegistrationService } from './people-registration.service';
+import { Person } from '../../models/person';
+import { PaginatedResponse } from '../../models/paginated-response';
 
-import {MatDialog, MatDialogModule} from '@angular/material/dialog';
-import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
-import {PeopleRegistrationUpdateComponent} from './update/people-registration-update.component';
-import {MatIcon, MatIconModule} from '@angular/material/icon';
-import {MatButton, MatIconButton} from '@angular/material/button';
-import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
-import {PeopleRegistrationCreateComponent} from './create/people-registration-create.component';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {ConfirmDialog} from '../../models/confirm-dialog';
+import {
+  MatDialog,
+  MatDialogModule
+} from '@angular/material/dialog';
+import {
+  MatSnackBar,
+  MatSnackBarModule
+} from '@angular/material/snack-bar';
+import { PeopleRegistrationUpdateComponent } from './update/people-registration-update.component';
+import { PeopleRegistrationCreateComponent } from './create/people-registration-create.component';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { ConfirmDialog } from '../../models/confirm-dialog';
+
+import {
+  MatIcon,
+  MatIconModule
+} from '@angular/material/icon';
+import {
+  MatButton,
+  MatIconButton
+} from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-people-registration',
@@ -67,7 +100,7 @@ export class PeopleRegistrationComponent implements AfterViewInit {
   });
 
   readonly formValueSignal = signal(this.filterForm.value);
-  private readonly paginationSignal = signal({pageIndex: 0, pageSize: 10});
+  private readonly paginationSignal = signal({ pageIndex: 0, pageSize: 10 });
 
   readonly peopleSignal = signal<PaginatedResponse<Person>>({
     results: [],
@@ -77,6 +110,13 @@ export class PeopleRegistrationComponent implements AfterViewInit {
   });
 
   readonly totalCount = computed(() => this.peopleSignal().count);
+
+  readonly filtered = computed(() => {
+    const name = this.formValueSignal().name?.toLowerCase() ?? '';
+    return this.peopleSignal().results.filter(person =>
+      person.name.toLowerCase().includes(name)
+    );
+  });
 
   private readonly MESSAGES = {
     createSuccess: 'Cadastro criado com sucesso!',
@@ -105,34 +145,39 @@ export class PeopleRegistrationComponent implements AfterViewInit {
   private registerFormChanges(): void {
     this.filterForm.valueChanges
       .pipe(debounceTime(400), takeUntilDestroyed(this.destroyRef))
-      .subscribe(value => {
-        this.formValueSignal.set(value);
-      });
+      .subscribe(value => this.formValueSignal.set(value));
   }
 
   private registerPeopleEffect(): void {
     effect(() => {
-      this.reload();
-    });
+      // API está retornando 500 ao enviar os query params --> name e sortBy
+      // const { name, sortBy } = this.formValueSignal();
+      const formValue = this.formValueSignal();
+      const pagination = this.paginationSignal();
+
+      this.reload(
+        pagination.pageIndex,
+        pagination.pageSize,
+        // formValue.name,
+        // formValue.sortBy
+      );
+    },
+      { allowSignalWrites: true }
+    );
   }
 
-  reload(): void {
-    const {pageIndex, pageSize} = this.paginationSignal();
-    // API esta dando erro 500 ao enviar os parameters, lembrar.
-    // const {name, sortBy} = this.formValueSignal();
 
+
+  reload(pageIndex: number = 0, pageSize: number = 10, name?: string, sortBy?: string): void {
     this.peopleService.getPeople(pageIndex + 1, pageSize)
       .pipe(
-        tap(response => {
-          this.peopleSignal.set(response);
-        }),
+        tap(response => this.peopleSignal.set(response)),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
   }
 
   private openPersonDialog(component: any, data: Person | null, successMessage: string): void {
-
     const dialogRef = this.dialog.open(component, {
       width: '500px',
       panelClass: 'config-dialog',
@@ -156,18 +201,26 @@ export class PeopleRegistrationComponent implements AfterViewInit {
   }
 
   createPerson(): void {
-    this.openPersonDialog(PeopleRegistrationCreateComponent, null, this.MESSAGES.createSuccess);
+    this.openPersonDialog(
+      PeopleRegistrationCreateComponent,
+      null,
+      this.MESSAGES.createSuccess
+    );
   }
 
   editPerson(person: Person): void {
-    this.openPersonDialog(PeopleRegistrationUpdateComponent, person, this.MESSAGES.updateSuccess);
+    this.openPersonDialog(
+      PeopleRegistrationUpdateComponent,
+      person,
+      this.MESSAGES.updateSuccess
+    );
   }
 
   deletePerson(person: Person): void {
-
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
       maxHeight: '80vh',
+      panelClass: 'success-dialog',
       data: {
         person,
         title: this.MESSAGES.deleteConfirmTitle,
@@ -176,10 +229,8 @@ export class PeopleRegistrationComponent implements AfterViewInit {
         confirmButtonText: 'Excluir',
         cancelButtonColor: '.btn-cancel',
         confirmButtonIcon: 'delete',
-        showCancelButton: false,
-
-      },
-      panelClass: 'success-dialog',
+        showCancelButton: false
+      }
     });
 
     dialogRef.afterClosed()
@@ -200,9 +251,11 @@ export class PeopleRegistrationComponent implements AfterViewInit {
                 this.reload();
               },
               error: (err) => {
-                this.snackBar.open(err.error.message || 'Erro ao excluir cadastro.', 'Fechar', {
-                  horizontalPosition: 'start'
-                });
+                this.snackBar.open(
+                  err.error.message || 'Erro ao excluir cadastro.',
+                  'Fechar',
+                  { horizontalPosition: 'start' }
+                );
               }
             });
         }
@@ -245,5 +298,4 @@ export class PeopleRegistrationComponent implements AfterViewInit {
       }
     });
   }
-
 }

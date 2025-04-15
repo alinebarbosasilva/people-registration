@@ -1,9 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatDialogModule } from '@angular/material/dialog';
 import { By } from '@angular/platform-browser';
-import {ConfirmDialogComponent} from './confirm-dialog.component';
+import { ConfirmDialogComponent } from './confirm-dialog.component';
 
 describe('ConfirmationDialogComponent', () => {
   let component: ConfirmDialogComponent;
@@ -11,8 +10,7 @@ describe('ConfirmationDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ConfirmDialogComponent],
-      imports: [MatDialogModule],
+      imports: [MatDialogModule, ConfirmDialogComponent],
       providers: [
         {
           provide: MAT_DIALOG_DATA,
@@ -24,6 +22,7 @@ describe('ConfirmationDialogComponent', () => {
             confirmButtonText: 'Confirm',
           },
         },
+        { provide: MatDialogRef, useValue: {} },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
@@ -71,11 +70,15 @@ describe('ConfirmationDialogComponent', () => {
   });
 
   it('should set default cancel button text to "Cancelar" if not provided', () => {
+    component.data.cancelButtonText = undefined;
+    fixture.detectChanges();
     const cancelButton: HTMLElement = fixture.nativeElement.querySelector('button[mat-button]');
     expect(cancelButton.textContent).toContain('Cancelar');
   });
 
   it('should set default confirm button text to "Confirmar" if not provided', () => {
+    component.data.confirmButtonText = undefined;
+    fixture.detectChanges();
     const confirmButton: HTMLElement = fixture.nativeElement.querySelector('button[mat-raised-button]');
     expect(confirmButton.textContent).toContain('Confirmar');
   });

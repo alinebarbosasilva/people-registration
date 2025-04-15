@@ -36,24 +36,11 @@ mat-drawer-content {
   }
 }
 
-
-.mat-list {
-  border-radius: 0!important;
-  padding: .5rem;
-  align-items: center!important;
-}
-
-a {
-  text-decoration: none;
-  display: flex;
-  justify-content: center;
+::ng-deep .mat-mdc-list-item-unscoped-content.mdc-list-item__primary-text {
+  display: flex !important;
   align-items: center;
-
-  ::ng-deep .mdc-list-item__primary-text {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
+  gap: 8px;
 }
+
 
 

@@ -1,6 +1,5 @@
 @use '@angular/material' as mat;
 
-
 $primary-color: #131E23;
 $color-secondary: #ffffff;
 $secondary-color: #ffffff;
@@ -389,7 +388,10 @@ button:hover {
 
   @include mat.select-overrides((
     placeholder-text-color: $secondary-color,
+    //label-text-color: $secondary-color,
+
   ));
+
 
   @include mat.form-field-overrides((
     input-text-color: $secondary-color,

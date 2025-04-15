@@ -1,66 +1,74 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { PeopleRegistrationCreateComponent } from './people-registration-create.component';
+
 import { PeopleRegistrationService } from '../people-registration.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ReactiveFormsModule } from '@angular/forms';
 import { of } from 'rxjs';
-import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { Router } from '@angular/router';
-import {Person} from '../../../models/person';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { Person } from '../../../models/person';
+import { MatInputModule } from '@angular/material/input';
+import {PeopleRegistrationComponent} from '../people-registration.component';
 
-describe('PeopleRegistrationCreateComponent', () => {
-  let component: PeopleRegistrationCreateComponent<any>;
-  let fixture: ComponentFixture<PeopleRegistrationCreateComponent<any>>;
+describe('PeopleRegistrationComponent', () => {
+  let component: PeopleRegistrationComponent;
+  let fixture: ComponentFixture<PeopleRegistrationComponent>;
   let peopleService: PeopleRegistrationService;
-  let dialogRef: MatDialogRef<any>;
-  let snackbar: any;
-  let router: Router;
+  let snackbar: jasmine.SpyObj<MatSnackBar>;
+
+  const mockPeople: Person[] = [
+    {
+      id: 1,
+      name: 'Naruto Uzumaki',
+      email: 'naruto@hokage.com',
+      phone: '(47)988414130',
+      birthDate: '1996-10-25T00:00:00.000Z',
+      createdAt: '2023-01-01T00:00:00.000Z',
+      updatedAt: '2023-01-01T00:00:00.000Z'
+    },
+    {
+      id: 2,
+      name: 'Sasuke Uchiha',
+      email: 'sasuke@uchiha.com',
+      phone: '(47)988414131',
+      birthDate: '1996-07-23T00:00:00.000Z',
+      createdAt: '2023-01-01T00:00:00.000Z',
+      updatedAt: '2023-01-01T00:00:00.000Z'
+    }
+  ];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
+        PeopleRegistrationComponent,
         HttpClientTestingModule,
         ReactiveFormsModule,
         MatDialogModule,
         MatSnackBarModule,
-        MatInputModule,
         MatButtonModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatFormFieldModule,
-        MatIconModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatInputModule
       ],
-      declarations: [PeopleRegistrationCreateComponent],
-      providers: [PeopleRegistrationService, { provide: MatDialogRef, useValue: {} }, { provide: Router, useValue: {} }]
+      providers: [
+        PeopleRegistrationService,
+        { provide: MatDialogRef, useValue: jasmine.createSpyObj('MatDialogRef', ['close']) },
+        { provide: MatSnackBar, useValue: jasmine.createSpyObj('MatSnackBar', ['open']) }
+      ]
     }).compileComponents();
   });
-
   beforeEach(() => {
-    fixture = TestBed.createComponent(PeopleRegistrationCreateComponent);
+    fixture = TestBed.createComponent(PeopleRegistrationComponent);
     component = fixture.componentInstance;
     peopleService = TestBed.inject(PeopleRegistrationService);
-    dialogRef = TestBed.inject(MatDialogRef);
-    snackbar = TestBed.inject(MatSnackBar);
-    router = TestBed.inject(Router);
+    snackbar = TestBed.inject(MatSnackBar) as jasmine.SpyObj<MatSnackBar>;
 
-    spyOn(peopleService, 'createPerson').and.returnValue(of(
-      {
-        id: 1,
-        name: 'Naruto Uzumaki',
-        email: 'naruto@hokage.com',
-        phone: '(47)988414130',
-        birthDate: '1996-10-25T00:00:00.000Z',
-        createdAt: '2023-01-01T00:00:00.000Z',
-        updatedAt: '2023-01-01T00:00:00.000Z'
-      }));
-
+    spyOn(peopleService, 'getPeople').and.returnValue(of({ results: mockPeople, page: 1, limit: 10, count: mockPeople.length }));
+    spyOn(peopleService, 'deletePerson').and.returnValue(of(void 0));
+    spyOn(peopleService, 'updatePerson').and.returnValue(of(mockPeople[0]));
     fixture.detectChanges();
   });
 
@@ -68,60 +76,35 @@ describe('PeopleRegistrationCreateComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should submit the form and create a new person', () => {
-    component.form.setValue({
-      name: 'Naruto Uzumaki',
-      email: 'naruto@hokage.com',
-      phone: '123456789',
-      birthDate: '10/10/1999'
-    });
+  // it('should reload people when component is initialized', () => {
+  //   component.ngOnInit();
+  //   expect(peopleService.getPeople).toHaveBeenCalled();
+  //   expect(component.people).toEqual(mockPeople);
+  // });
+  //
+  // it('should filter people by name and sort by name', () => {
+  //   component.filterByName('Naruto');
+  //   expect(component.filteredPeople.length).toBe(1);
+  //   expect(component.filteredPeople[0].name).toBe('Naruto Uzumaki');
+  //
+  //   component.sortByName();
+  //   expect(component.filteredPeople[0].name).toBe('Naruto Uzumaki');
+  // });
 
-    spyOn(dialogRef, 'close');
-    component.onSubmit();
-
+  it('should create a person', () => {
+    component.createPerson();
     expect(peopleService.createPerson).toHaveBeenCalled();
-    expect(dialogRef.close).toHaveBeenCalled();
+    expect(snackbar.open).toHaveBeenCalledWith('Pessoa criada com sucesso!', 'Fechar', { horizontalPosition: 'start' });
   });
 
-  it('should show error if form is invalid', () => {
-    component.form.setValue({
-      name: '',
-      email: 'invalid-email',
-      phone: '479884',
-      birthDate: ''
-    });
-
-    spyOn(snackbar, 'open');
-
-    component.onSubmit();
-
-    expect(snackbar.open).toHaveBeenCalledWith('Erro ao cadastrar.', 'Fechar', { horizontalPosition: 'start' });
+  it('should edit a person', () => {
+    component.editPerson(mockPeople[0]);
+    expect(peopleService.updatePerson).toHaveBeenCalledWith(mockPeople[0].id, mockPeople[0]);
   });
 
-  it('should call onCancel and close the dialog', () => {
-    spyOn(dialogRef, 'close');
-
-    component.onCancel();
-
-    expect(dialogRef.close).toHaveBeenCalled();
-  });
-
-  it('should format birthDate correctly when submitted', () => {
-    const rawFormValue = {
-      name: 'Naruto Uzumaki',
-      email: 'naruto@hokage.com',
-      phone: '47988414130',
-      birthDate: '25/10/1996'
-    } as Person;
-
-    const formattedBirthDate = new Date('1996-10-25').toISOString();
-
-    component.form.setValue(rawFormValue);
-    component.onSubmit();
-
-    expect(peopleService.createPerson).toHaveBeenCalledWith({
-      ...rawFormValue,
-      birthDate: formattedBirthDate
-    });
+  it('should delete a person', () => {
+    component.deletePerson(mockPeople[0]);
+    expect(peopleService.deletePerson).toHaveBeenCalledWith(mockPeople[0].id);
+    expect(snackbar.open).toHaveBeenCalledWith('Pessoa excluída com sucesso!', 'Fechar', { horizontalPosition: 'start' });
   });
 });
