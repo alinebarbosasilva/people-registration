@@ -1,27 +1,48 @@
-# PeopleRegistration
+# 🧾 Cadastro de Pessoas
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.18.
+Aplicação desenvolvida em **Angular 18** para gerenciamento de pessoas, com recursos de **cadastro, edição, listagem com filtros, paginação e exclusão**.  
+Conta com uma interface moderna, responsiva e acessível, construída com **Angular Material**, **Angular Signals** e boas práticas de arquitetura e reatividade.
 
-## Development server
+## 🚀 Tecnologias Utilizadas
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- **Angular 18.2.18.**
+- **Angular Material**
+- **Angular Signals**
+- **RxJS (Observables)** para consumo da API
+- **ngMask** para máscaras em campos de formulário
+- **TypeScript, SCSS e HTML5**
+- **Tokens do Angular Material** para configuração global de UI
 
-## Code scaffolding
+## ✨ Funcionalidades
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- ✅ **Cadastro** de novas pessoas
+- ✅ **Edição** de dados
+- ✅ **Listagem paginada** com filtros dinâmicos
+- ✅ **Exclusão** de registros com confirmação
+- ✅ Máscaras para telefone e data de nascimento
+- ✅ Diálogos reutilizáveis com feedbacks amigáveis
+- ✅ Uso de **tokens do Angular Material** para customização de temas e comportamentos globais
 
-## Build
+## 🔍 Filtros e Paginação
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+A tela de listagem permite:
 
-## Running unit tests
+- 🔎 **Filtrar por nome e email**
+- 📄 **Paginar os resultados** por página, com controle de quantidade de itens
+- ♻️ Atualização automática da lista a partir de observables
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## 🌐 Integração com API
 
-## Running end-to-end tests
+A aplicação consome uma API pública REST:
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+- **Base URL:** `https://dev-api-plt.4asset.net.br/exam/v1/persons`  
+- **Documentação:** [https://dev-api-plt.4asset.net.br/exam/docs/](https://dev-api-plt.4asset.net.br/exam/docs/)
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Formato do retorno da API:
+```json
+{
+  "results": [ ... ],
+  "page": 1,
+  "limit": 10,
+  "count": 25
+}
