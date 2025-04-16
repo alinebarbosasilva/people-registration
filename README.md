@@ -38,7 +38,6 @@ A tela de listagem permite:
 A aplicação consome uma API pública REST:
 
 - **Base URL:** `https://dev-api-plt.4asset.net.br/exam/v1/persons`  
-- **Documentação:** [https://dev-api-plt.4asset.net.br/exam/docs/](https://dev-api-plt.4asset.net.br/exam/docs/)
 
 Formato do retorno da API:
 ```json
