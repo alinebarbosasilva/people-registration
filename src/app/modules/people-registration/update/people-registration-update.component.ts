@@ -92,7 +92,7 @@ export class PeopleRegistrationUpdateComponent implements OnInit {
         },
         error: (err) => {
           this.snackbar.open(err.error?.message || 'Erro ao editar.', 'Fechar', {
-            horizontalPosition: 'start'
+            horizontalPosition: 'start',
           });
         }
       });

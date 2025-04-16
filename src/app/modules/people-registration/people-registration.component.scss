@@ -87,12 +87,12 @@ $mobile-breakpoint: 600px;
   box-sizing: border-box;
   align-items: center;
   border-radius: .5rem;
-  max-width: 882px;
+  max-width: 935px;
   padding: 0 1rem;
   justify-content: space-between;
   background-color: $primary-color;
 
-  h3{
+  h3 {
     font-size: 1.2rem;
     color: $color-secondary;
     font-family: var(--app-font-family);
@@ -108,7 +108,7 @@ $mobile-breakpoint: 600px;
   justify-content: center;
   display: flex;
   flex-direction: column;
-  max-width: 882px;
+  max-width: 935px;
   background-color: $color-secondary;
 }
 
@@ -116,7 +116,7 @@ $mobile-breakpoint: 600px;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  max-width: 882px;
+  max-width: 935px;
   width: 100%;
   justify-content: space-between;
 
@@ -207,8 +207,9 @@ button:hover {
   top: .6rem;
 
   @include mat.select-overrides((
-    placeholder-text-color: $secondary-color
-
+    placeholder-text-color: $secondary-color,
+    enabled-trigger-text-color: $secondary-color,
+    trigger-text-line-height: 3
   ));
 
 
@@ -221,6 +222,7 @@ button:hover {
     input-text-placeholder-color: $secondary-color,
     focus-outline-color: $secondary-color,
     focus-label-text-color: $secondary-color,
+    container-text-line-height: 3
   ));
 }
 
@@ -250,33 +252,14 @@ mat-paginator {
   border: none;
 }
 
-.empty-table{
+.empty-table {
   padding: 2rem;
 }
 
 ::ng-deep .mat-mdc-header-row, .mat-mdc-header-cell {
-  position: sticky!important;
-  top: 0!important;
+  position: sticky !important;
+  top: 0 !important;
   z-index: 9999 !important;
+  background-color: $primary-color !important;
 }
 
-::-webkit-scrollbar {
-  width: 6px;
-  height: 1px;
-  position: absolute;
-  top: 0.1rem;
-}
-
-::-webkit-scrollbar-track {
-  z-index: -1;
-  transform: translateX(-1rem);
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 2px!important;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(0, 0, 0, 0.3)!important;
-}

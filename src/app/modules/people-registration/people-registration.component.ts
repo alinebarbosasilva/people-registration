@@ -1,61 +1,30 @@
-import {
-  AfterViewInit,
-  Component,
-  DestroyRef,
-  ViewChild,
-  computed,
-  effect,
-  inject,
-  signal
-} from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule as RFM
-} from '@angular/forms';
-import {
-  MatPaginator,
-  MatPaginatorModule,
-  PageEvent
-} from '@angular/material/paginator';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import {
-  MatNativeDateModule,
-  MatOptionModule
-} from '@angular/material/core';
-import { MatTableModule } from '@angular/material/table';
-import { debounceTime, tap } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {Component, computed, DestroyRef, effect, inject, signal, ViewChild} from '@angular/core';
+import {CommonModule, DatePipe} from '@angular/common';
+import {FormBuilder, FormGroup, ReactiveFormsModule as RFM} from '@angular/forms';
+import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {MatNativeDateModule, MatOptionModule} from '@angular/material/core';
+import {MatTableModule} from '@angular/material/table';
+import {debounceTime, tap} from 'rxjs';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
-import { PeopleRegistrationService } from './people-registration.service';
-import { Person } from '../../models/person';
-import { PaginatedResponse } from '../../models/paginated-response';
+import {PeopleRegistrationService} from './people-registration.service';
+import {Person} from '../../models/person';
+import {PaginatedResponse} from '../../models/paginated-response';
 
-import {
-  MatDialog,
-  MatDialogModule
-} from '@angular/material/dialog';
-import {
-  MatSnackBar,
-  MatSnackBarModule
-} from '@angular/material/snack-bar';
-import { PeopleRegistrationUpdateComponent } from './update/people-registration-update.component';
-import { PeopleRegistrationCreateComponent } from './create/people-registration-create.component';
-import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
-import { ConfirmDialog } from '../../models/confirm-dialog';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+import {PeopleRegistrationUpdateComponent} from './update/people-registration-update.component';
+import {PeopleRegistrationCreateComponent} from './create/people-registration-create.component';
+import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
+import {ConfirmDialog} from '../../models/confirm-dialog';
 
-import {
-  MatIcon,
-  MatIconModule
-} from '@angular/material/icon';
-import {
-  MatButton,
-  MatIconButton
-} from '@angular/material/button';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import {MatIcon, MatIconModule} from '@angular/material/icon';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {PeopleRegistrationTableComponent} from './table/people-registration-table.component';
 
 @Component({
   selector: 'app-people-registration',
@@ -77,13 +46,14 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatButton,
     MatIconButton,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    PeopleRegistrationTableComponent
   ],
   templateUrl: './people-registration.component.html',
   styleUrls: ['./people-registration.component.scss'],
   providers: [MatDatepickerModule]
 })
-export class PeopleRegistrationComponent implements AfterViewInit {
+export class PeopleRegistrationComponent {
   private readonly peopleService = inject(PeopleRegistrationService);
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
@@ -92,15 +62,13 @@ export class PeopleRegistrationComponent implements AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  readonly displayedColumns: string[] = ['name', 'email', 'phone', 'birthDate', 'actions'];
-
   readonly filterForm: FormGroup = this.fb.group({
     name: [''],
     sortBy: ['name:asc']
   });
 
   readonly formValueSignal = signal(this.filterForm.value);
-  private readonly paginationSignal = signal({ pageIndex: 0, pageSize: 10 });
+  readonly paginationSignal = signal<Partial<PageEvent>>({pageIndex: 0, pageSize: 10});
 
   readonly peopleSignal = signal<PaginatedResponse<Person>>({
     results: [],
@@ -113,9 +81,20 @@ export class PeopleRegistrationComponent implements AfterViewInit {
 
   readonly filtered = computed(() => {
     const name = this.formValueSignal().name?.toLowerCase() ?? '';
-    return this.peopleSignal().results.filter(person =>
+    const sortBy = this.formValueSignal().sortBy;
+
+    const filteredData = this.peopleSignal().results.filter(person =>
       person.name.toLowerCase().includes(name)
     );
+
+    return filteredData.sort((first, second) => {
+      if (sortBy === 'name:asc') {
+        return first.name.localeCompare(second.name);
+      } else if (sortBy === 'name:desc') {
+        return second.name.localeCompare(first.name);
+      }
+      return 0;
+    });
   });
 
   private readonly MESSAGES = {
@@ -131,17 +110,6 @@ export class PeopleRegistrationComponent implements AfterViewInit {
     this.registerFormChanges();
   }
 
-  ngAfterViewInit(): void {
-    this.paginator.page
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((event: PageEvent) => {
-        this.paginationSignal.set({
-          pageIndex: event.pageIndex,
-          pageSize: event.pageSize
-        });
-      });
-  }
-
   private registerFormChanges(): void {
     this.filterForm.valueChanges
       .pipe(debounceTime(400), takeUntilDestroyed(this.destroyRef))
@@ -150,19 +118,18 @@ export class PeopleRegistrationComponent implements AfterViewInit {
 
   private registerPeopleEffect(): void {
     effect(() => {
-      // API está retornando 500 ao enviar os query params --> name e sortBy
-      // const { name, sortBy } = this.formValueSignal();
-      const formValue = this.formValueSignal();
-      const pagination = this.paginationSignal();
+        // API está retornando erro 500 ao enviar os query params --> name e sortBy por isso está comentado.
+        // const { name, sortBy } = this.formValueSignal();
+        const pagination = this.paginationSignal();
 
-      this.reload(
-        pagination.pageIndex,
-        pagination.pageSize,
-        // formValue.name,
-        // formValue.sortBy
-      );
-    },
-      { allowSignalWrites: true }
+        this.reload(
+          pagination.pageIndex,
+          pagination.pageSize,
+          // name,
+          // sortBy
+        );
+      },
+      {allowSignalWrites: true}
     );
   }
 
@@ -252,7 +219,7 @@ export class PeopleRegistrationComponent implements AfterViewInit {
                 this.snackBar.open(
                   err.error.message || 'Erro ao excluir cadastro.',
                   'Fechar',
-                  { horizontalPosition: 'start' }
+                  {horizontalPosition: 'start'}
                 );
               }
             });
