@@ -5,6 +5,14 @@ Conta com uma interface moderna, responsiva e acessível, construída com **Angu
 
 ![image](https://github.com/user-attachments/assets/4e5007f0-7903-4070-91da-da8b761bb619)
 
+![image](https://github.com/user-attachments/assets/e312cbd4-9486-4379-8a7e-5fc864c4323b)
+
+![image](https://github.com/user-attachments/assets/e888894f-6e7b-4bb9-b5de-f55f612803d2)
+
+![image](https://github.com/user-attachments/assets/a76f4d5c-d809-4d32-b9f8-2d77dbfffb39)
+
+![image](https://github.com/user-attachments/assets/221235e6-0b15-4bc0-9507-ab2afd1a1d4c)
+
 ## 🚀 Tecnologias Utilizadas
 
 - **Angular 18.2.18.**
