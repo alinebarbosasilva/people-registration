@@ -2,6 +2,7 @@
 
 Aplicação desenvolvida em **Angular 18** para gerenciamento de pessoas, com recursos de **cadastro, edição, listagem com filtros, paginação e exclusão**.  
 Conta com uma interface moderna, responsiva e acessível, construída com **Angular Material**, **Angular Signals** e boas práticas de arquitetura e reatividade.
+![image](https://github.com/user-attachments/assets/4e5007f0-7903-4070-91da-da8b761bb619)
 
 ## 🚀 Tecnologias Utilizadas
 
